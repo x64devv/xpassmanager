@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xpassmanager/screens/constants.dart';
 
@@ -26,6 +25,7 @@ class XButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(32),
       ),
       child: Material(
+        borderRadius: BorderRadius.circular(32),
         color: Colors.transparent,
         child: InkWell(
           splashColor: kColorSecondary,

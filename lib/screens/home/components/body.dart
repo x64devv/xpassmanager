@@ -1,219 +1,423 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:xpassmanager/components/account_results.dart';
 import 'package:xpassmanager/components/input_field.dart';
-import 'package:xpassmanager/components/x_button.dart';
-
+import 'package:xpassmanager/components/lottie_widget.dart';
+import 'package:xpassmanager/components/pass_entry.dart';
+import 'package:xpassmanager/components/search_field.dart';
+import 'package:xpassmanager/model/datase_helper.dart';
+import 'package:xpassmanager/model/user_model.dart';
+import 'package:xpassmanager/screens/home/components/add_account_sheet.dart';
+import 'package:xpassmanager/screens/home/components/add_button.dart';
+import 'package:xpassmanager/screens/home/components/add_cartegory.dart';
+import 'package:xpassmanager/screens/profile/profile_sheet.dart';
 import '../../../components/avatar_card.dart';
+import '../../../model/cartegory_model.dart';
+import '../../../model/password_model.dart';
 import '../../constants.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  final UserModel user;
+
+  Body({super.key, required this.user});
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   String searchText = "";
 
+  //profile image
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Container(
-      width: size.width,
-      height: size.height,
-      decoration: BoxDecoration(
-        color: kColorSecondary,
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            left: 16,
-            right: 16,
-            top: 28,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.menu_rounded,
-                          color: kColorPrimary,
-                        ))),
-                const AvatarCard(
-                  image: "assets/avatar_1.jpeg",
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-              top: size.height * 0.15,
+    return SingleChildScrollView(
+      child: Container(
+        width: size.width,
+        height: size.height,
+        decoration: BoxDecoration(
+          color: kColorSecondary,
+        ),
+        child: Stack(
+          children: [
+            Positioned(
               left: 16,
-              child: RichText(
-                text: TextSpan(
-                    text: "Welcome Back!\n\n",
-                    style: GoogleFonts.montserrat(fontSize: 12, color: kColorAccent, fontWeight: FontWeight.normal),
-                    children: [
-                      TextSpan(
-                        text: "Jack Jones",
-                        style: GoogleFonts.montserrat(fontSize: 18, color: kColorAccent, fontWeight: FontWeight.bold),
-                      )
-                    ]),
-              )),
-          Positioned(
-            top: size.height * 0.25,
-            right: 16,
-            left: 16,
-            child: InputField(
-                color: kColorPrimary,
-                hint: "Search site...",
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return "      Can't search empty value dummy";
-                  } else {
-                    return null;
-                  }
-                },
-                onChanged: (value) {
-                  searchText = value;
-                },
-                icon: Icons.search_rounded),
-          ),
-          Positioned(
-              bottom: 0,
-              child: Container(
-                padding: const EdgeInsets.only(right: 16, left: 16, top: 8),
-                height: size.height * 0.63,
-                width: size.width,
-                decoration: BoxDecoration(
-                    color: kColorPrimary,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(32),
-                      topRight: Radius.circular(32),
-                    )),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Account Cartegory",
-                          style: GoogleFonts.montserrat(fontSize: 16, fontWeight: FontWeight.bold, color: kColorAccent),
-                        ),
-                        Icon(
-                          Icons.add_box_rounded,
+              right: 16,
+              top: 28,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Material(
+                      color: Colors.transparent,
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.menu_rounded,
+                            color: kColorPrimary,
+                          ))),
+                  IconButton(
+                    onPressed: () {
+                      showBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          context: context,
+                          builder: (context) {
+                            return ProfileSheet(user: widget.user);
+                          });
+                    },
+                    icon: AvatarCard(
+                      image: widget.user.avatarPath!,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+                top: size.height * 0.15,
+                left: 16,
+                child: RichText(
+                  text: TextSpan(
+                      text: "Welcome Back!\n\n",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 12,
                           color: kColorAccent,
+                          fontWeight: FontWeight.normal),
+                      children: [
+                        TextSpan(
+                          text: "Jack Jones",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 18,
+                              color: kColorAccent,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ]),
+                )),
+            Positioned(
+              top: size.height * 0.25,
+              right: 16,
+              left: 16,
+              child: SearchField(searchFxn: (value) {
+                 showBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (context) {
+                      return AccoutResultsSheet(
+                        cartegory: CartegoryModel(),
+                        isSearch: true,
+                        size: size,
+                        searchQuery: value,
+                      );
+                    });
+              }),
+            ),
+            Positioned(
+                bottom: 0,
+                child: Container(
+                  height: size.height * 0.63,
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      color: kColorPrimary,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(32),
+                        topRight: Radius.circular(32),
+                      )),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Cartegories",
+                                style: textStyle(true, 16, color: kColorAccent),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showBottomSheet(
+                                          context: context,
+                                          builder: (context) {
+                                            return AddCartegorySheet(
+                                                size: size,
+                                                saveCartegory: (cartegory) {
+                                                  addCartegory(cartegory)
+                                                      .then((success) {
+                                                    setState(() {
+                                                      if (success) {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                  "Adding ${cartegory.cartegoryName} successfull",
+                                                                  style: textStyle(
+                                                                      true, 16,
+                                                                      color:
+                                                                          kColorAccent),
+                                                                ),
+                                                                content:
+                                                                    Container(
+                                                                  height:
+                                                                      size.height *
+                                                                          0.4,
+                                                                  width:
+                                                                      size.width *
+                                                                          0.6,
+                                                                  child: Column(
+                                                                    children: [
+                                                                      LottieWidget(
+                                                                        lottieAnimation:
+                                                                            "assets/lottie/lottie_done.json",
+                                                                        size:
+                                                                            size,
+                                                                      ),
+                                                                      TextButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child:
+                                                                              Text(
+                                                                            "Close",
+                                                                            style: textStyle(true,
+                                                                                16,
+                                                                                color: kColorSecondary),
+                                                                          ))
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            });
+                                                      }
+                                                    });
+                                                  });
+                                                });
+                                          });
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.add_box_rounded,
+                                    color: kColorAccent,
+                                  ))
+                            ],
+                          ),
                         ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          height: 80,
+                          padding: const EdgeInsets.only(left: 16),
+                          child: FutureBuilder(
+                            initialData: const <CartegoryModel>[],
+                            future: fetchCartegories(),
+                            builder: (context,
+                                AsyncSnapshot<List<CartegoryModel>> snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data!.isNotEmpty) {
+                                return ListView.builder(
+                                    itemCount: snapshot.data!.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      var cartegory = snapshot.data![index];
+                                      return InkWell(
+                                        onTap: () {
+                                          showBottomSheet(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              context: context,
+                                              builder: (context) {
+                                                return AccoutResultsSheet(
+                                                  cartegory: cartegory,
+                                                  isSearch: false,
+                                                  size: size,
+                                                );
+                                              });
+                                        },
+                                        child: Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 8),
+                                          child: Column(
+                                            children: [
+                                              AvatarCard(
+                                                  image: cartegory.avatarPath!),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Text(
+                                                cartegory.cartegoryName!,
+                                                style: textStyle(false, 12,
+                                                    color: kColorAccent),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              }
+                              return Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Add cartegory and they will show here",
+                                  style:
+                                      textStyle(false, 12, color: kColorAccent),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        //Below its going to list all the passwords/accounts saved sorted by latest entry date
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text(
+                            "Latest",
+                            style: textStyle(true, 16, color: kColorAccent),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 8, right: 8),
+                          child: FutureBuilder(
+                              initialData: <PasswordModel>[],
+                              future: fetchPasswords(),
+                              builder: (context,
+                                  AsyncSnapshot<List<PasswordModel>> snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data!.isNotEmpty) {
+                                  return SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ...List.generate(snapshot.data!.length,
+                                            (index) {
+                                          var lastDate = "";
+                                          PasswordModel currentPass =
+                                              snapshot.data![index];
+                                          if (currentPass.dateAdded !=
+                                              lastDate) {
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Text(
+                                                  "${currentPass.dateAdded}",
+                                                  style: textStyle(true, 14,
+                                                      color: kColorAccent),
+                                                ),
+                                                const SizedBox(
+                                                  height: 8,
+                                                ),
+                                                PassWordEntry(
+                                                    avatar: AvatarCard(
+                                                        image: currentPass
+                                                            .siteIcon!),
+                                                    name: currentPass.name!,
+                                                    user: currentPass.user!,
+                                                    pass: currentPass.pass!),
+                                                const SizedBox(
+                                                  height: 4,
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                          return PassWordEntry(
+                                              avatar: AvatarCard(
+                                                  image: currentPass.siteIcon!),
+                                              name: currentPass.name!,
+                                              user: currentPass.user!,
+                                              pass: currentPass.pass!);
+                                        })
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }),
+                        )
                       ],
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            Icons.business_sharp,
-                            size: 48,
-                            color: kColorSecondary,
-                          ),
-                          Icon(
-                            Icons.sports,
-                            size: 48,
-                            color: kColorSecondary,
-                          ),
-                          Icon(
-                            Icons.sports_soccer,
-                            size: 48,
-                            color: kColorSecondary,
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      "Latest",
-                      style: GoogleFonts.montserrat(fontSize: 16, fontWeight: FontWeight.bold, color: kColorAccent),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration:
-                          BoxDecoration(color: kColorAccent.withOpacity(0.1), borderRadius: BorderRadius.circular(32)),
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 8.0),
-                            child: AvatarCard(image: "assets/avatar_1.jpeg"),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Spotify",
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 12, fontWeight: FontWeight.normal, color: kColorAccent),
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  "john.doe@x64dev.com",
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 12, fontWeight: FontWeight.normal, color: kColorAccent),
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "************",
-                                      style: GoogleFonts.montserrat(
-                                          fontSize: 12, fontWeight: FontWeight.normal, color: kColorAccent),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.visibility_rounded,
-                                        color: kColorAccent,
-                                        size: 18,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.copy_outlined,
-                              color: kColorAccent,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-          Positioned(
-            bottom: 8,
-            right: size.width*0.3,
-            left: size.width * 0.3,
-            child: XButton(
-              text: "Add Account",
-              color: kColorAccent,
-              textColor: kColorPrimary,
-              fontWeight: FontWeight.normal,
-              onTap: () {})),
-        ],
+                  ),
+                )),
+
+            //This positioned widget houses the add button
+            //When the add button is pressed it pops up the add password/account (the spoils of inconsistent naming) bottomsheet
+            //A fuction is passed to is from this pages so that when is executes setstate() is done on the body widget not the bottom sheet(hopefully)
+            //then in the setstate() appropriate dialogs for adding password/account status
+            Positioned(
+                bottom: 8,
+                right: 16,
+                child: AddButton(onTap: () {
+                  showBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (context) {
+                        PasswordModel passwordModel = PasswordModel();
+                        return AccountSheet(
+                          size: size,
+                          passwordModel: passwordModel,
+                          savePassword: (password) {
+                            addPassword(password).then((success) {
+                              if (success) {
+                                setState(() {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            "Adding Password for ${password.name} successfull",
+                                            style: textStyle(true, 16,
+                                                color: kColorAccent),
+                                          ),
+                                          content: Container(
+                                            height: size.height * 0.4,
+                                            width: size.width * 0.6,
+                                            child: Column(
+                                              children: [
+                                                LottieWidget(
+                                                  lottieAnimation:
+                                                      "assets/lottie/lottie_done.json",
+                                                  size: size,
+                                                ),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(
+                                                      "Close",
+                                                      style: textStyle(true, 16,
+                                                          color:
+                                                              kColorSecondary),
+                                                    ))
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                });
+                              }
+                            });
+                          },
+                        );
+                      });
+                })),
+          ],
+        ),
       ),
     );
   }
