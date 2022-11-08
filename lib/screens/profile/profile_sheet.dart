@@ -34,7 +34,7 @@ class ProfileSheet extends StatelessWidget {
             height: 16,
           ),
           Text(
-            "John Doe",
+            user.name!,
             style: GoogleFonts.montserrat(
                 fontSize: 16, fontWeight: FontWeight.bold, color: kColorAccent),
           ),
@@ -58,7 +58,7 @@ class ProfileSheet extends StatelessWidget {
             height: 16,
           ),
           ProfileOption(
-            text: "Logout",
+            text: "Exit",
             icon: Icons.exit_to_app_rounded,
             onTap: () {
               SystemNavigator.pop();
@@ -86,31 +86,36 @@ class ProfileOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
-      decoration: BoxDecoration(
-        color: kColorAccent.withAlpha(30),
-        borderRadius: BorderRadius.circular(32),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            text,
-            style: GoogleFonts.montserrat(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: kColorSecondary),
-          ),
-          Icon(
-            icon,
-            color: kColorAccent,
-            size: 30,
-          )
-        ],
+    return GestureDetector(
+      onTap: () {
+        onTap();
+      },
+      child: Container(
+        height: 60,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+        decoration: BoxDecoration(
+          color: kColorAccent.withAlpha(30),
+          borderRadius: BorderRadius.circular(32),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              text,
+              style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: kColorSecondary),
+            ),
+            Icon(
+              icon,
+              color: kColorAccent,
+              size: 30,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -137,7 +142,7 @@ class _EditAvatarState extends State<EditAvatar> {
       width: 100,
       child: Column(
         children: [
-          const AvatarCard(image: "assets/avatar_1.jpeg"),
+          AvatarCard(image: widget.user.avatarPath!),
           // IconButton(iconSize: 26,padding: const EdgeInsets.all(0), onPressed: (){}, icon: Icon(Icons.camera_alt_rounded, color: kColorSecondary,))
           TextButton(
               onPressed: () async {

@@ -84,7 +84,7 @@ class _BodyState extends State<Body> {
                           fontWeight: FontWeight.normal),
                       children: [
                         TextSpan(
-                          text: "Jack Jones",
+                          text: "${widget.user.name}",
                           style: GoogleFonts.montserrat(
                               fontSize: 18,
                               color: kColorAccent,
@@ -97,7 +97,7 @@ class _BodyState extends State<Body> {
               right: 16,
               left: 16,
               child: SearchField(searchFxn: (value) {
-                 showBottomSheet(
+                showBottomSheet(
                     backgroundColor: Colors.transparent,
                     context: context,
                     builder: (context) {
@@ -294,6 +294,7 @@ class _BodyState extends State<Body> {
                                   AsyncSnapshot<List<PasswordModel>> snapshot) {
                                 if (snapshot.hasData &&
                                     snapshot.data!.isNotEmpty) {
+                                      var lastDate = "";
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
                                     child: Column(
@@ -302,11 +303,11 @@ class _BodyState extends State<Body> {
                                       children: [
                                         ...List.generate(snapshot.data!.length,
                                             (index) {
-                                          var lastDate = "";
                                           PasswordModel currentPass =
                                               snapshot.data![index];
                                           if (currentPass.dateAdded !=
                                               lastDate) {
+                                            lastDate = currentPass.dateAdded!;
                                             return Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,

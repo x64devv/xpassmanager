@@ -1,16 +1,7 @@
 # xpassmanager
 
-A new Flutter project.
+Xpass mangager is a simple password manager that helps you keep all your passwords in one place instead of having ot remember a bunch of passwords you just have to remember the master password. This app implemented using flutter and dart.
 
-## Getting Started
+You can learn about (flutter)[https://flutter.dev]
+You can find design inspiration (here)[https://dribbble.com]
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
