@@ -2,6 +2,13 @@
 
 Xpass mangager is a simple password manager that helps you keep all your passwords in one place instead of having ot remember a bunch of passwords you just have to remember the master password. This app implemented using flutter and dart.
 
-You can learn about (flutter)[https://flutter.dev]
-You can find design inspiration (here)[https://dribbble.com]
+## Work in progress
+- bugs are still work in progresss
 
+## Screenshots
+
+### login and registration
+
+<div>
+<img src="login.png" alt="login" width=20/>
+</div>
