@@ -19,7 +19,7 @@ class UserModel {
       "name": name,
       "username": username,
       "password": password,
-      "avartarPath": avatarPath,
+      "avatarPath": avatarPath,
     };
   }
 }

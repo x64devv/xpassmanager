@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xpassmanager/screens/login/login_screen.dart';
 
 import 'screens/home/home_screen.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }

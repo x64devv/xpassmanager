@@ -1,19 +1,14 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xpassmanager/screens/constants.dart';
-import 'package:lottie/lottie.dart';
-import 'package:xpassmanager/screens/login/components/login_form.dart';
+import 'package:xpassmanager/screens/login/login_screen.dart';
+import 'package:xpassmanager/screens/register/components/register_form.dart';
 
-import '../../../components/input_field.dart';
 import '../../../components/logo.dart';
 import '../../../components/lottie_widget.dart';
-import '../../../components/social_card.dart';
-import '../../home/home_screen.dart';
-import '../../register/register_screen.dart';
+import '../../constants.dart';
 
 class Body extends StatelessWidget {
-  Body({super.key});
+  const Body({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +31,7 @@ class Body extends StatelessWidget {
             top: size.height * 0.15,
             left: (size.width / 2) - (size.width * 0.3),
             child: LottieWidget(
-              lottieAnimation: "assets/lottie/lottie_login.json",
+              lottieAnimation: "assets/lottie/lottie_registration.json",
               size: size,
             ),
           ),
@@ -55,7 +50,7 @@ class Body extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const LoginForm(),
+                    RegisterForm(),
                     Text(
                       "OR",
                       style: GoogleFonts.montserrat(fontSize: 11, color: kColorAccent, fontWeight: FontWeight.normal),
@@ -74,12 +69,12 @@ class Body extends StatelessWidget {
                       height: 8,
                     ),
                     TextButton(onPressed: () {
-                       Navigator.push(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterScreen()));
+                              builder: (context) => LoginScreen()));
                     }, child: Text(
-                        "No Accout? Register Here",
+                        "Already Registered? Login Here",
                         style: GoogleFonts.montserrat(fontSize: 11, color: kColorAccent, decoration: TextDecoration.underline, fontWeight: FontWeight.normal),
                       ),
                     )
